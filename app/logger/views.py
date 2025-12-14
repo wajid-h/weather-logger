@@ -43,20 +43,18 @@ def index(request):
         )
         return HttpResponse("Data logged successfully")
     
-    # --- GET request: render dashboard ---
+
     recent_entries = LogEntry.objects.order_by('-timestamp')[:30]
     latest_entry = LogEntry.objects.order_by('-timestamp').first()
     
     latest_temperature = latest_entry.temprature if latest_entry else 0
     latest_humidity = latest_entry.humidity if latest_entry else 0
     
-    # Calculate time since last update
     time_since_update = "No data yet"
     if latest_entry:
         diff = timezone.now() - latest_entry.timestamp
         time_since_update = humanize_time(diff)
     
-    # Prepare chart data (last 24h as default)
     last_day = timezone.now() - timedelta(days=1)
     chart_entries = LogEntry.objects.filter(timestamp__gte=last_day).order_by('timestamp')
     
@@ -64,7 +62,6 @@ def index(request):
     temperature_data = [float(e.temprature) for e in chart_entries]
     humidity_data = [float(e.humidity) for e in chart_entries]
     
-    # Prepare recent entries with humanized times
     recent_entries_data = []
     for entry in recent_entries:
         diff = timezone.now() - entry.timestamp

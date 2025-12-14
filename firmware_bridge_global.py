@@ -3,15 +3,15 @@ import serial
 import time
 import requests
 
-m_platform = platform.system()
-print(f"Running on a {m_platform} system")
+DJANGO_URL = "http://127.0.0.1:8000"
+CURRENT_PLATFORM = platform.system()
+print(f"Running on a {CURRENT_PLATFORM} system")
 
-port_identifier = "COM5" if m_platform == "Windows" else "/dev/ttyACM0"
+port_identifier = "COM5" if CURRENT_PLATFORM == "Windows" else "/dev/ttyACM0"
 
 ser = serial.Serial(port_identifier, 9600, timeout=1)
 time.sleep(5)
 
-DJANGO_URL = "http://127.0.0.1:8000"
 
 print("Listening...")
 while True:
