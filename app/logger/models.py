@@ -2,8 +2,8 @@ from django.db import models
 
 
 class LogEntry (models.Model): 
-    temprature =  models.IntegerField()
-    humidity = models.IntegerField();
+    temprature =  models.FloatField()
+    humidity = models.FloatField();
     timestamp =  models.DateTimeField(auto_now_add=  True)
 
     def __str__(self):

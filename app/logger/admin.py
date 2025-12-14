@@ -4,9 +4,9 @@ from . models import LogEntry
 @admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = (
-        "temprature_celsius",
-        "humidity_percent",
         "timestamp",
+        "humidity_percent",
+        "temprature_celsius",
     )
 
     sortable_by = ("temprature", "humidity", "timestamp")
