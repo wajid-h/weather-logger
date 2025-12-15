@@ -5,15 +5,20 @@ import requests
 
 DJANGO_URL = "http://127.0.0.1:8000"
 CURRENT_PLATFORM = platform.system()
-print(f"Running on a {CURRENT_PLATFORM} system")
 
 port_identifier = "COM5" if CURRENT_PLATFORM == "Windows" else "/dev/ttyACM0"
+print(f"Running on a {CURRENT_PLATFORM} system, handshaking port '{port_identifier}'")
+try:
+    ser = serial.Serial(port_identifier, 9600, timeout=1)
+except FileNotFoundError as e:
+    print(f"Device unavailable at {e.filename}")
+    
+    exit();
 
-ser = serial.Serial(port_identifier, 9600, timeout=1)
+
+print(f"Port ready, waiting for serial device on {port_identifier} to refresh")
 time.sleep(5)
-
-
-print("Listening...")
+print(f"Listening and will transmit to server on {DJANGO_URL}")
 while True:
     if ser.in_waiting:
         line = ser.readline().decode("utf-8", errors="ignore").strip()
