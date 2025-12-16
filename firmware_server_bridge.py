@@ -3,7 +3,7 @@ import serial
 import time
 import requests
 
-DJANGO_URL = "http://127.0.0.1:8000"
+WEBSERVER_URL = "http://127.0.0.1:8000"
 CURRENT_PLATFORM = platform.system()
 
 port_identifier = "COM5" if CURRENT_PLATFORM == "Windows" else "/dev/ttyACM0"
@@ -12,13 +12,12 @@ try:
     ser = serial.Serial(port_identifier, 9600, timeout=1)
 except FileNotFoundError as e:
     print(f"Device unavailable at {e.filename}")
-    
     exit();
 
 
 print(f"Port ready, waiting for serial device on {port_identifier} to refresh")
 time.sleep(5)
-print(f"Listening and will transmit to server on {DJANGO_URL}")
+print(f"Listening and will transmit to server on {WEBSERVER_URL}")
 while True:
     if ser.in_waiting:
         line = ser.readline().decode("utf-8", errors="ignore").strip()
@@ -34,7 +33,7 @@ while True:
         }
 
         try:
-            response = requests.post(DJANGO_URL, json=payload, timeout=2)
+            response = requests.post(WEBSERVER_URL, json=payload, timeout=2)
             print("Sent:", payload, "| Status:", response.status_code)
         except requests.exceptions.RequestException as e:
             print("POST failed:", e)
